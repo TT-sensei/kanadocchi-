@@ -19,6 +19,7 @@ const badges = new BadgeManager({ storage, storageKey: 'badges', badges: BADGES,
 const defaultState = () => ({
   sound: true,
   recentBadge: null,
+  stats: { totalCorrect: 0, totalAnswered: 0, readAlouds: 0 },
   stages: Object.fromEntries(STAGES.map((stage) => [stage.id, { plays: 0, bestScore: 0, bestStars: 0, retryIds: [] }]))
 });
 
@@ -31,9 +32,10 @@ let currentChoice = null;
 let score = new ScoreManager();
 let missedIds = new Set();
 let carriedRetryIds = [];
+let reviewIds = new Set();
+let reviewCorrectCount = 0;
 let locked = false;
 let audioContext = null;
-let pendingBadgeIds = [];
 
 const $ = (selector) => document.querySelector(selector);
 const screens = [...document.querySelectorAll('.screen')];
@@ -43,6 +45,11 @@ function normalizeState(saved) {
   if (!saved || typeof saved !== 'object') return fresh;
   fresh.sound = saved.sound !== false;
   fresh.recentBadge = typeof saved.recentBadge === 'string' ? saved.recentBadge : null;
+  fresh.stats = {
+    totalCorrect: Math.max(0, Number(saved.stats?.totalCorrect) || 0),
+    totalAnswered: Math.max(0, Number(saved.stats?.totalAnswered) || 0),
+    readAlouds: Math.max(0, Number(saved.stats?.readAlouds) || 0)
+  };
   STAGES.forEach((stage) => {
     const old = saved.stages?.[stage.id] || {};
     fresh.stages[stage.id] = {
@@ -111,6 +118,7 @@ function renderHome() {
     $('#recent-badge-image').alt = `${recent.name} バッジ`;
     $('#recent-badge-name').textContent = recent.name;
   }
+  $('#collection-count').textContent = `${badges.getAwardedCount()} / ${BADGES.length}`;
   updateSoundButton();
 }
 
@@ -133,6 +141,8 @@ async function startStage(stageId) {
   await playSound('start', 0.16);
   sessionQuestions = buildSession(stageId);
   const sessionIds = new Set(sessionQuestions.map((item) => item.id));
+  reviewIds = new Set(state.stages[stageId].retryIds.filter((id) => sessionIds.has(id)));
+  reviewCorrectCount = 0;
   carriedRetryIds = state.stages[stageId].retryIds.filter((id) => !sessionIds.has(id));
   currentIndex = 0;
   score.reset();
@@ -196,6 +206,7 @@ function answer(choice, selectedButton) {
   const feedback = $('#feedback');
   if (result.isCorrect) {
     score.correct();
+    if (reviewIds.has(currentQuestion.id)) reviewCorrectCount += 1;
     selectedButton.classList.add('is-correct');
     feedback.className = 'feedback is-correct edu-pop';
     feedback.innerHTML = '<span aria-hidden="true">〇</span> せいかい！';
@@ -226,8 +237,9 @@ function finishStage() {
   stageState.bestScore = Math.max(stageState.bestScore, result.correct);
   stageState.bestStars = Math.max(stageState.bestStars, stars);
   stageState.retryIds = [...new Set([...carriedRetryIds, ...missedIds])];
+  state.stats.totalCorrect += result.correct;
+  state.stats.totalAnswered += result.total;
   progress.complete(currentStage.id);
-  saveState();
 
   $('#result-score').textContent = result.correct;
   $('#result-stars').textContent = renderStars(stars);
@@ -239,9 +251,38 @@ function finishStage() {
   $('#result-burst').textContent = perfect ? '👑' : currentStage.icon;
 
   const newBadges = [];
-  if (badges.award(currentStage.badge)) newBadges.push(currentStage.badge);
-  if (perfect && badges.award('perfect')) newBadges.push('perfect');
-  if (STAGES.every((stage) => progress.isCompleted(stage.id)) && badges.award('moji-master')) newBadges.push('moji-master');
+  const award = (id, condition = true) => {
+    if (condition && badges.award(id)) newBadges.push(id);
+  };
+  const completedCount = progress.getCompletedCount();
+  const totalPlays = STAGES.reduce((sum, stage) => sum + state.stages[stage.id].plays, 0);
+  award(currentStage.badge);
+  award('first-step', totalPlays >= 1);
+  award('two-stages', completedCount >= 2);
+  award('three-stages', completedCount >= 3);
+  award('moji-master', completedCount >= 4);
+  award('score-five', result.correct >= 5);
+  award('score-seven', result.correct >= 7);
+  award('score-nine', result.correct >= 9);
+  award('perfect', perfect);
+  award('play-two', totalPlays >= 2);
+  award('play-three', totalPlays >= 3);
+  award('play-five', totalPlays >= 5);
+  award('play-eight', totalPlays >= 8);
+  award('play-twelve', totalPlays >= 12);
+  award('play-twenty', totalPlays >= 20);
+  award('correct-ten', state.stats.totalCorrect >= 10);
+  award('correct-twenty-five', state.stats.totalCorrect >= 25);
+  award('correct-fifty', state.stats.totalCorrect >= 50);
+  award('correct-eighty', state.stats.totalCorrect >= 80);
+  award('correct-one-twenty', state.stats.totalCorrect >= 120);
+  award('try-again', missedIds.size > 0);
+  award('review-correct', reviewCorrectCount > 0);
+  award('kuttsuki-twice', currentStage.id === 'kuttsuki' && stageState.plays >= 2);
+  award('youon-twice', currentStage.id === 'youon' && stageState.plays >= 2);
+  award('sokuon-twice', currentStage.id === 'sokuon' && stageState.plays >= 2);
+  award('choon-twice', currentStage.id === 'choon' && stageState.plays >= 2);
+  saveState();
 
   const stageBadge = badges.getDefinition(currentStage.badge);
   const badgeBox = $('#result-badge');
@@ -254,16 +295,12 @@ function finishStage() {
 
   showScreen('result-screen');
   playSound(perfect ? 'allclear' : 'stageClear', 0.17);
-  pendingBadgeIds = newBadges;
-  if (pendingBadgeIds.length) window.setTimeout(showNextBadge, 700);
+  if (newBadges.length) window.setTimeout(() => showBadgeOverlay(newBadges), 700);
 }
 
-function showNextBadge() {
-  const id = pendingBadgeIds.shift();
-  if (id) showBadgeOverlay(id);
-}
-
-function showBadgeOverlay(id) {
+function showBadgeOverlay(ids) {
+  const badgeIds = Array.isArray(ids) ? ids : [ids];
+  const id = badgeIds.at(-1);
   const badge = badges.getDefinition(id);
   if (!badge) return;
   state.recentBadge = id;
@@ -271,6 +308,7 @@ function showBadgeOverlay(id) {
   $('#badge-overlay-image').src = badge.image;
   $('#badge-overlay-image').alt = `${badge.name} バッジ`;
   $('#badge-overlay-title').textContent = badge.name;
+  $('#badge-overlay-count').textContent = badgeIds.length > 1 ? `バッジを ${badgeIds.length}こ ゲット！` : 'あたらしい バッジ！';
   $('#badge-overlay').hidden = false;
   playSound('badge', 0.18);
   $('#badge-close-button').focus();
@@ -278,7 +316,38 @@ function showBadgeOverlay(id) {
 
 function closeBadgeOverlay() {
   $('#badge-overlay').hidden = true;
-  if (pendingBadgeIds.length) window.setTimeout(showNextBadge, 220);
+}
+
+function renderCollection() {
+  const grid = $('#collection-grid');
+  grid.replaceChildren();
+  const awardedCount = badges.getAwardedCount();
+  $('#collection-total').textContent = `${awardedCount} / ${BADGES.length}`;
+  $('#collection-fill').style.width = `${Math.round((awardedCount / BADGES.length) * 100)}%`;
+
+  BADGES.forEach((badge) => {
+    const unlocked = badges.has(badge.id);
+    const card = document.createElement('article');
+    card.className = `collection-card ${unlocked ? 'is-unlocked' : 'is-locked'}`;
+    card.innerHTML = `
+      <div class="collection-image-wrap">
+        <img src="${badge.image}" alt="${unlocked ? `${badge.name} バッジ` : ''}">
+        ${unlocked ? '<span aria-hidden="true">✓</span>' : '<span aria-hidden="true">?</span>'}
+      </div>
+      <strong>${unlocked ? badge.name : '？？？'}</strong>
+      <small>${unlocked ? 'ゲットしたよ！' : badge.hint}</small>`;
+    grid.append(card);
+  });
+}
+
+function openCollection() {
+  renderCollection();
+  $('#collection-overlay').hidden = false;
+  $('#collection-close-button').focus();
+}
+
+function closeCollection() {
+  $('#collection-overlay').hidden = true;
 }
 
 function speakCurrentQuestion() {
@@ -289,6 +358,10 @@ function speakCurrentQuestion() {
   utterance.rate = 0.78;
   utterance.pitch = 1.08;
   window.speechSynthesis.speak(utterance);
+  state.stats.readAlouds += 1;
+  const isNew = state.stats.readAlouds >= 3 && badges.award('listen-three');
+  saveState();
+  if (isNew) window.setTimeout(() => showBadgeOverlay(['listen-three']), 250);
 }
 
 async function playSound(id, volume = 0.16) {
@@ -329,6 +402,9 @@ eventBus.addEventListener(EDU_EVENTS.BADGE, (event) => {
 });
 
 $('#sound-button').addEventListener('click', toggleSound);
+$('#collection-button').addEventListener('click', openCollection);
+$('#collection-close-button').addEventListener('click', closeCollection);
+$('#collection-overlay').addEventListener('click', (event) => { if (event.target === $('#collection-overlay')) closeCollection(); });
 $('#quit-button').addEventListener('click', () => { window.speechSynthesis?.cancel(); renderHome(); showScreen('home-screen'); });
 $('#speak-button').addEventListener('click', speakCurrentQuestion);
 $('#retry-button').addEventListener('click', () => startStage(currentStage.id));
