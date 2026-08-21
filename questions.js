@@ -1,0 +1,117 @@
+export const STAGES = [
+  { id: 'kuttsuki', name: 'くっつきことば', short: 'は・を・へ', description: 'ぶんに ぴったりな もじを えらぼう', icon: '🔗', color: '#ff7b67', badge: 'kuttsuki-clear' },
+  { id: 'youon', name: 'ちいさい「ゃゅょ」', short: 'ゃ・ゅ・ょ', description: 'ちいさい もじを みつけよう', icon: '🔍', color: '#7b6cf6', badge: 'youon-clear' },
+  { id: 'sokuon', name: 'ちいさい「っ」', short: 'ちいさい っ', description: 'つまる おとを みつけよう', icon: '🐾', color: '#14a98b', badge: 'sokuon-clear' },
+  { id: 'choon', name: 'のばすおと', short: 'う・お・い・え', description: 'のばす おとの かきかたを えらぼう', icon: '🎈', color: '#e59b18', badge: 'choon-clear' }
+];
+
+const q = (id, stage, question, choices, answer, image, speak = null) => ({
+  id, stage, question, choices, answer, image, speak: speak || question.replace('（　）', '')
+});
+
+export const QUESTIONS = [
+  // くっつきことば：は → を → へ の順で基礎を確認し、後半で混ぜる。
+  q('k01', 'kuttsuki', 'わたし（　）いちねんせいです。', ['は', 'わ'], 0, '🙋', 'わたしは いちねんせいです'),
+  q('k02', 'kuttsuki', 'きょう（　）はれです。', ['は', 'わ'], 0, '☀️', 'きょうは はれです'),
+  q('k03', 'kuttsuki', 'ぞう（　）おおきいです。', ['は', 'わ'], 0, '🐘', 'ぞうは おおきいです'),
+  q('k04', 'kuttsuki', 'みず（　）のみます。', ['を', 'お'], 0, '🥛', 'みずを のみます'),
+  q('k05', 'kuttsuki', 'ほん（　）よみます。', ['を', 'お'], 0, '📖', 'ほんを よみます'),
+  q('k06', 'kuttsuki', 'え（　）かきます。', ['を', 'お'], 0, '🖍️', 'えを かきます'),
+  q('k07', 'kuttsuki', 'がっこう（　）いきます。', ['へ', 'え'], 0, '🏫', 'がっこうへ いきます'),
+  q('k08', 'kuttsuki', 'こうえん（　）いきます。', ['へ', 'え'], 0, '🛝', 'こうえんへ いきます'),
+  q('k09', 'kuttsuki', 'うち（　）かえります。', ['へ', 'え'], 0, '🏠', 'うちへ かえります'),
+  q('k10', 'kuttsuki', 'ねこ（　）ねています。', ['は', 'わ'], 0, '🐈', 'ねこは ねています'),
+  q('k11', 'kuttsuki', 'りんご（　）たべます。', ['を', 'お'], 0, '🍎', 'りんごを たべます'),
+  q('k12', 'kuttsuki', 'としょかん（　）いきます。', ['へ', 'え'], 0, '📚', 'としょかんへ いきます'),
+  q('k13', 'kuttsuki', 'ぼく（　）はしります。', ['は', 'わ'], 0, '🏃', 'ぼくは はしります'),
+  q('k14', 'kuttsuki', 'は（　）みがきます。', ['を', 'お'], 0, '🪥', 'はを みがきます'),
+  q('k15', 'kuttsuki', 'そら（　）とびます。', ['へ', 'え'], 0, '🕊️', 'そらへ とびます'),
+  q('k16', 'kuttsuki', 'いぬ（　）げんきです。', ['は', 'わ'], 0, '🐕', 'いぬは げんきです'),
+
+  // 拗音
+  q('y01', 'youon', 'ただしい かきかたは？', ['おちゃ', 'おちや'], 0, '🍵', 'おちゃ'),
+  q('y02', 'youon', 'ただしい かきかたは？', ['しゃしん', 'しやしん'], 0, '📷', 'しゃしん'),
+  q('y03', 'youon', 'ただしい かきかたは？', ['きゅうり', 'きゆうり'], 0, '🥒', 'きゅうり'),
+  q('y04', 'youon', 'ただしい かきかたは？', ['ちょきん', 'ちよきん'], 0, '🐷', 'ちょきん'),
+  q('y05', 'youon', 'ただしい かきかたは？', ['でんしゃ', 'でんしや'], 0, '🚃', 'でんしゃ'),
+  q('y06', 'youon', 'ただしい かきかたは？', ['ぎゅうにゅう', 'ぎゆうにゆう'], 0, '🥛', 'ぎゅうにゅう'),
+  q('y07', 'youon', 'ただしい かきかたは？', ['りょこう', 'りよこう'], 0, '🧳', 'りょこう'),
+  q('y08', 'youon', 'ただしい かきかたは？', ['きゃべつ', 'きやべつ'], 0, '🥬', 'きゃべつ'),
+  q('y09', 'youon', 'ただしい かきかたは？', ['しゅくだい', 'しゆくだい'], 0, '✏️', 'しゅくだい'),
+  q('y10', 'youon', 'ただしい かきかたは？', ['びょういん', 'びよういん'], 0, '🏥', 'びょういん'),
+  q('y11', 'youon', 'ただしい かきかたは？', ['じゃんけん', 'じやんけん'], 0, '✊', 'じゃんけん'),
+  q('y12', 'youon', 'ただしい かきかたは？', ['ちゅうしゃ', 'ちゆうしや'], 0, '💉', 'ちゅうしゃ'),
+  q('y13', 'youon', 'ただしい かきかたは？', ['ひゃく', 'ひやく'], 0, '💯', 'ひゃく'),
+  q('y14', 'youon', 'ただしい かきかたは？', ['にんぎょう', 'にんぎよう'], 0, '🎎', 'にんぎょう'),
+  q('y15', 'youon', 'ただしい かきかたは？', ['りゅう', 'りゆう'], 0, '🐉', 'りゅう'),
+  q('y16', 'youon', 'ただしい かきかたは？', ['きょうしつ', 'きようしつ'], 0, '🏫', 'きょうしつ'),
+
+  // 促音
+  q('s01', 'sokuon', 'ただしい かきかたは？', ['がっこう', 'がこう'], 0, '🏫', 'がっこう'),
+  q('s02', 'sokuon', 'ただしい かきかたは？', ['きって', 'きて'], 0, '✉️', 'きって'),
+  q('s03', 'sokuon', 'ただしい かきかたは？', ['らっぱ', 'らぱ'], 0, '🎺', 'らっぱ'),
+  q('s04', 'sokuon', 'ただしい かきかたは？', ['きっぷ', 'きぷ'], 0, '🎫', 'きっぷ'),
+  q('s05', 'sokuon', 'ただしい かきかたは？', ['ざっし', 'ざし'], 0, '📰', 'ざっし'),
+  q('s06', 'sokuon', 'ただしい かきかたは？', ['ねっこ', 'ねこ'], 0, '🌱', 'ねっこ'),
+  q('s07', 'sokuon', 'ただしい かきかたは？', ['さっかー', 'さかー'], 0, '⚽', 'さっかー'),
+  q('s08', 'sokuon', 'ただしい かきかたは？', ['こっぷ', 'こぷ'], 0, '🥤', 'こっぷ'),
+  q('s09', 'sokuon', 'ただしい かきかたは？', ['べっど', 'べど'], 0, '🛏️', 'べっど'),
+  q('s10', 'sokuon', 'ただしい かきかたは？', ['せっけん', 'せけん'], 0, '🧼', 'せっけん'),
+  q('s11', 'sokuon', 'ただしい かきかたは？', ['まっちゃ', 'まちゃ'], 0, '🍵', 'まっちゃ'),
+  q('s12', 'sokuon', 'ただしい かきかたは？', ['きっさてん', 'きさてん'], 0, '☕', 'きっさてん'),
+  q('s13', 'sokuon', 'ただしい かきかたは？', ['はっぱ', 'はぱ'], 0, '🍃', 'はっぱ'),
+  q('s14', 'sokuon', 'ただしい かきかたは？', ['にっき', 'にき'], 0, '📓', 'にっき'),
+  q('s15', 'sokuon', 'ただしい かきかたは？', ['しっぽ', 'しぽ'], 0, '🐕', 'しっぽ'),
+  q('s16', 'sokuon', 'ただしい かきかたは？', ['けっこん', 'けこん'], 0, '💐', 'けっこん'),
+
+  // 長音：基本の「う・い」と、よく使う「お・え」の語を混ぜる。
+  q('c01', 'choon', 'ただしい かきかたは？', ['おとうさん', 'おとおさん'], 0, '👨', 'おとうさん'),
+  q('c02', 'choon', 'ただしい かきかたは？', ['おとうと', 'おとおと'], 0, '👦', 'おとうと'),
+  q('c03', 'choon', 'ただしい かきかたは？', ['こうえん', 'こおえん'], 0, '🛝', 'こうえん'),
+  q('c04', 'choon', 'ただしい かきかたは？', ['ぼうし', 'ぼおし'], 0, '🧢', 'ぼうし'),
+  q('c05', 'choon', 'ただしい かきかたは？', ['そうじ', 'そおじ'], 0, '🧹', 'そうじ'),
+  q('c06', 'choon', 'ただしい かきかたは？', ['せんせい', 'せんせえ'], 0, '🧑‍🏫', 'せんせい'),
+  q('c07', 'choon', 'ただしい かきかたは？', ['とけい', 'とけえ'], 0, '🕰️', 'とけい'),
+  q('c08', 'choon', 'ただしい かきかたは？', ['えいが', 'ええが'], 0, '🎬', 'えいが'),
+  q('c09', 'choon', 'ただしい かきかたは？', ['おおきい', 'おうきい'], 0, '🐘', 'おおきい'),
+  q('c10', 'choon', 'ただしい かきかたは？', ['おおかみ', 'おうかみ'], 0, '🐺', 'おおかみ'),
+  q('c11', 'choon', 'ただしい かきかたは？', ['とおい', 'とうい'], 0, '🗻', 'とおい'),
+  q('c12', 'choon', 'ただしい かきかたは？', ['こおり', 'こうり'], 0, '🧊', 'こおり'),
+  q('c13', 'choon', 'ただしい かきかたは？', ['おねえさん', 'おねいさん'], 0, '👩', 'おねえさん'),
+  q('c14', 'choon', 'ただしい かきかたは？', ['ほお', 'ほう'], 0, '😊', 'ほお'),
+  q('c15', 'choon', 'ただしい かきかたは？', ['おおい', 'おうい'], 0, '🍎', 'おおい'),
+  q('c16', 'choon', 'ただしい かきかたは？', ['とおる', 'とうる'], 0, '🚪', 'とおる')
+];
+
+export const BADGES = [
+  { id: 'kuttsuki-clear', name: 'ことば つなぎ', hint: 'くっつきことばを 1かい おわる', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/japanese/words-connect/badge.png' },
+  { id: 'youon-clear', name: 'ちいさいもじ はっけん', hint: 'ちいさい「ゃゅょ」を 1かい おわる', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/japanese/word-detective/badge.png' },
+  { id: 'sokuon-clear', name: 'ことばの リズム', hint: 'ちいさい「っ」を 1かい おわる', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/japanese/language-rhythm/badge.png' },
+  { id: 'choon-clear', name: 'ていねい かな', hint: 'のばすおとを 1かい おわる', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/japanese/careful-writing/badge.png' },
+  { id: 'first-step', name: 'はじめの いっぽ', hint: 'はじめて 10もん おわる', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/first-step/badge.png' },
+  { id: 'two-stages', name: 'ふたつ クリア', hint: '2つの ステージを おわる', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/clear/badge.png' },
+  { id: 'three-stages', name: 'あと ひとつ！', hint: '3つの ステージを おわる', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/mission-complete/badge.png' },
+  { id: 'moji-master', name: 'もじマスター', hint: '4つの ステージを おわる', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/mastery/badge.png' },
+  { id: 'score-five', name: 'いい ちょうし', hint: '1かいで 5もん せいかい', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/great-answer/badge.png' },
+  { id: 'score-seven', name: 'しっかり かな', hint: '1かいで 7もん せいかい', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/accuracy/badge.png' },
+  { id: 'score-nine', name: 'あと いっぽ！', hint: '1かいで 9もん せいかい', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/champion/badge.png' },
+  { id: 'perfect', name: 'かんぺき！', hint: '10もん ぜんぶ せいかい', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/perfect/badge.png' },
+  { id: 'play-two', name: 'もう いっかい', hint: 'あわせて 2かい あそぶ', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/challenger/badge.png' },
+  { id: 'play-three', name: 'こつこつ かな', hint: 'あわせて 3かい あそぶ', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/steady-progress/badge.png' },
+  { id: 'play-five', name: 'がんばりや', hint: 'あわせて 5かい あそぶ', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/hard-worker/badge.png' },
+  { id: 'play-eight', name: 'れんしゅう めいじん', hint: 'あわせて 8かい あそぶ', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/practice-master/badge.png' },
+  { id: 'play-twelve', name: 'かな しゅうかん', hint: 'あわせて 12かい あそぶ', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/streak/badge.png' },
+  { id: 'play-twenty', name: 'ずっと ちょうせん', hint: 'あわせて 20かい あそぶ', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/keep-going/badge.png' },
+  { id: 'correct-ten', name: '10この ことば', hint: 'あわせて 10もん せいかい', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/knowledge/badge.png' },
+  { id: 'correct-twenty-five', name: 'ことばの め', hint: 'あわせて 25もん せいかい', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/japanese/word-sprout/badge.png' },
+  { id: 'correct-fifty', name: 'ことばの き', hint: 'あわせて 50もん せいかい', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/japanese/word-tree/badge.png' },
+  { id: 'correct-eighty', name: 'かな たんけんか', hint: 'あわせて 80もん せいかい', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/japanese/language-explorer/badge.png' },
+  { id: 'correct-one-twenty', name: 'ことば しょくにん', hint: 'あわせて 120もん せいかい', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/japanese/word-weaver/badge.png' },
+  { id: 'try-again', name: 'まちがいも だいじ', hint: 'まちがえても さいごまで がんばる', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/try-again/badge.png' },
+  { id: 'review-correct', name: 'できたに かわった', hint: 'まえに まちがえた もんだいに せいかい', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/japanese/self-correction/badge.png' },
+  { id: 'kuttsuki-twice', name: 'つなぎ はかせ', hint: 'くっつきことばを 2かい おわる', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/connection/badge.png' },
+  { id: 'youon-twice', name: 'こもじ はかせ', hint: 'ちいさい「ゃゅょ」を 2かい おわる', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/discovery/badge.png' },
+  { id: 'sokuon-twice', name: 'つまるおと はかせ', hint: 'ちいさい「っ」を 2かい おわる', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/focus/badge.png' },
+  { id: 'choon-twice', name: 'のばすおと はかせ', hint: 'のばすおとを 2かい おわる', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/common/observer/badge.png' },
+  { id: 'listen-three', name: 'みみで ことば', hint: '「きく」を 3かい つかう', image: 'https://tt-sensei.github.io/edu-assets/assets/badges/japanese/reading-aloud/badge.png' }
+];

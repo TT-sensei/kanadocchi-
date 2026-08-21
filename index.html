@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fff8e8">
+  <meta name="description" content="2つからえらんで、ひらがなのかきかたをたのしくまなぶ教材です。">
+  <title>かなどっち？</title>
+  <link rel="stylesheet" href="https://tt-sensei.github.io/edu-effects/css/edu-effects.css">
+  <link rel="stylesheet" href="https://tt-sensei.github.io/edu-effects/css/edu-learning.css">
+  <link rel="stylesheet" href="https://tt-sensei.github.io/edu-effects/css/edu-feedback.css">
+  <link rel="stylesheet" href="https://tt-sensei.github.io/edu-effects/css/edu-effects-learning-motion.css">
+  <link rel="stylesheet" href="https://tt-sensei.github.io/edu-effects/css/edu-ui-variants.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section id="home-screen" class="screen is-active" aria-labelledby="site-title">
+      <header class="home-header">
+        <div class="brand-copy">
+          <p class="eyebrow">ひらがな 2たく クイズ</p>
+          <h1 id="site-title">かな<span>どっち？</span></h1>
+          <p class="home-lead">ふたつから、ただしい かきかたを えらぼう！</p>
+        </div>
+        <div class="header-actions">
+          <button id="collection-button" class="round-button collection-button edu-press" type="button" aria-label="バッジずかんを ひらく">
+            <span aria-hidden="true">🏅</span><span id="collection-count" class="button-label">0 / 30</span>
+          </button>
+          <button id="sound-button" class="round-button edu-press" type="button" aria-pressed="true" aria-label="おとを けす">
+            <span aria-hidden="true">🔊</span><span class="button-label">おと</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="mascot-message" aria-label="もじまるからのメッセージ">
+        <div class="mascot" aria-hidden="true"><span>あ</span></div>
+        <div>
+          <strong>もじまる</strong>
+          <p>すきな ところから はじめてね！</p>
+        </div>
+        <div id="master-title" class="master-title" hidden>👑 もじマスター</div>
+      </div>
+
+      <div id="stage-grid" class="stage-grid edu-stagger" aria-label="ステージを えらぶ"></div>
+
+      <aside id="recent-badge" class="recent-badge" hidden aria-live="polite">
+        <img id="recent-badge-image" alt="">
+        <div><small>さいきん ゲット！</small><strong id="recent-badge-name"></strong></div>
+      </aside>
+    </section>
+
+    <section id="play-screen" class="screen play-screen" aria-labelledby="play-stage-name">
+      <header class="play-header">
+        <button id="quit-button" class="back-button edu-press" type="button" aria-label="トップへ もどる">← もどる</button>
+        <div class="play-stage-heading">
+          <span id="play-stage-icon" aria-hidden="true"></span>
+          <strong id="play-stage-name"></strong>
+        </div>
+        <button id="speak-button" class="speak-button edu-press" type="button" aria-label="ことばを よみあげる">🔈 きく</button>
+      </header>
+
+      <div class="progress-row">
+        <span id="question-count">1 / 10</span>
+        <div class="progress-track" aria-hidden="true"><span id="progress-fill"></span></div>
+        <span id="correct-count">〇 0</span>
+      </div>
+
+      <article id="question-card" class="question-card edu-question">
+        <div id="picture" class="picture" aria-hidden="true"></div>
+        <p id="question-instruction" class="question-instruction">ただしい ほうは どっち？</p>
+        <h2 id="question-text" class="question-text"></h2>
+      </article>
+
+      <div id="choice-area" class="choice-area edu-answer-binary" aria-label="こたえ"></div>
+      <div id="feedback" class="feedback" role="status" aria-live="assertive"></div>
+    </section>
+
+    <section id="result-screen" class="screen result-screen" aria-labelledby="result-title">
+      <div id="result-burst" class="result-burst" aria-hidden="true">★</div>
+      <p id="result-kicker" class="result-kicker">10もん おわったよ！</p>
+      <h2 id="result-title">よく できました！</h2>
+      <div class="score-display">
+        <strong id="result-score">10</strong><span>/ 10</span>
+      </div>
+      <div id="result-stars" class="result-stars edu-stars" aria-label="ほし 3こ">★★★</div>
+      <p id="result-message" class="result-message"></p>
+
+      <div id="result-badge" class="result-badge edu-reward" hidden>
+        <img id="result-badge-image" alt="">
+        <div><small>バッジ ゲット！</small><strong id="result-badge-name"></strong></div>
+      </div>
+
+      <div class="result-actions">
+        <button id="retry-button" class="primary-action edu-btn edu-btn-game edu-btn-xl edu-press" type="button">もういちど</button>
+        <button id="home-button" class="secondary-action edu-btn edu-btn-xl edu-press" type="button">トップへ</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="collection-overlay" class="collection-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="collection-title">
+    <section class="collection-dialog">
+      <header class="collection-header">
+        <div>
+          <p>あつめた バッジ</p>
+          <h2 id="collection-title">バッジずかん</h2>
+        </div>
+        <button id="collection-close-button" class="collection-close edu-press" type="button" aria-label="バッジずかんを とじる">✕</button>
+      </header>
+      <div class="collection-meter">
+        <strong id="collection-total">0 / 30</strong>
+        <div class="collection-track" aria-hidden="true"><span id="collection-fill"></span></div>
+      </div>
+      <div id="collection-grid" class="collection-grid"></div>
+    </section>
+  </div>
+
+  <div id="badge-overlay" class="badge-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="badge-overlay-title">
+    <div class="badge-dialog edu-reward">
+      <div class="sparkles" aria-hidden="true">✦　★　✦</div>
+      <img id="badge-overlay-image" alt="">
+      <p id="badge-overlay-count">あたらしい バッジ！</p>
+      <h2 id="badge-overlay-title"></h2>
+      <button id="badge-close-button" class="edu-btn edu-btn-game edu-btn-xl" type="button">やったー！</button>
+    </div>
+  </div>
+
+  <noscript>この きょうざいは JavaScriptを つかいます。</noscript>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
