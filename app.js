@@ -114,9 +114,6 @@ function renderHome() {
     grid.append(button);
   });
 
-  const master = STAGES.every((stage) => progress.isCompleted(stage.id));
-  $('#master-title').hidden = !master;
-
   const recent = badges.getDefinition(state.recentBadge);
   const recentBox = $('#recent-badge');
   recentBox.hidden = !recent;
