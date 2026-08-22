@@ -89,7 +89,6 @@ function renderStars(count) {
 }
 
 function renderHome() {
-  const homeNav = document.querySelector('.mascot-message .mascot'); if (homeNav) homeNav.innerHTML = '<img src="'+NAVI_BASE+'groups/group-standing.png" alt="6人のナビキャラ">';
   const grid = $('#stage-grid');
   grid.replaceChildren();
 
