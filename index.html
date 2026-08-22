@@ -40,6 +40,8 @@
         </div>
         <div id="master-title" class="master-title" hidden>👑 もじマスター</div>
       </div>
+        <div class="navi-roster" aria-label="ナビキャラ6人"><img src="https://tt-sensei.github.io/navi-character-/assets/characters/riku/reference.jpeg" alt="りく" loading="lazy"><img src="https://tt-sensei.github.io/navi-character-/assets/characters/sora/reference.jpeg" alt="そら" loading="lazy"><img src="https://tt-sensei.github.io/navi-character-/assets/characters/kai/reference.jpeg" alt="かい" loading="lazy"><img src="https://tt-sensei.github.io/navi-character-/assets/characters/saku/reference.jpeg" alt="さく" loading="lazy"><img src="https://tt-sensei.github.io/navi-character-/assets/characters/tsuki/reference.jpeg" alt="つき" loading="lazy"><img src="https://tt-sensei.github.io/navi-character-/assets/characters/nami/reference.jpeg" alt="なみ" loading="lazy"></div>
+      </div>
 
       <div id="stage-grid" class="stage-grid edu-stagger" aria-label="ステージを えらぶ"></div>
 
@@ -59,6 +61,8 @@
         <button id="speak-button" class="speak-button edu-press" type="button" aria-label="ことばを よみあげる">🔈 きく</button>
       </header>
 
+      <aside id="nav-companion" class="nav-companion" aria-live="polite"><img id="nav-companion-image" alt=""><div><strong id="nav-companion-name">ナビキャラ</strong><span id="nav-companion-message">いっしょに かんがえよう！</span></div></aside>
+
       <div class="progress-row">
         <span id="question-count">1 / 10</span>
         <div class="progress-track" aria-hidden="true"><span id="progress-fill"></span></div>
@@ -76,7 +80,7 @@
     </section>
 
     <section id="result-screen" class="screen result-screen" aria-labelledby="result-title">
-      <div id="result-burst" class="result-burst" aria-hidden="true">★</div>
+      <div id="result-burst" class="result-burst" aria-hidden="true">★</div><aside class="result-navi" aria-live="polite"><img id="result-nav-image" alt=""><span id="result-nav-message"></span></aside>
       <p id="result-kicker" class="result-kicker">10もん おわったよ！</p>
       <h2 id="result-title">よく できました！</h2>
       <div class="score-display">

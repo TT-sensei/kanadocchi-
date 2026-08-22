@@ -11,6 +11,13 @@ import { soundList } from 'https://tt-sensei.github.io/sounds-recipe-/sounds.js'
 import { STAGES, QUESTIONS, BADGES } from './questions.js';
 
 const SESSION_SIZE = 10;
+const NAVI_BASE = 'https://tt-sensei.github.io/navi-character-/assets/characters/';
+const NAVI_CHARS = ["riku","sora","kai","saku","tsuki","nami"];
+const NAVI_NAMES = {"riku":"りく","sora":"そら","kai":"かい","saku":"さく","tsuki":"つき","nami":"なみ"};
+const navImage = (name, expression) => NAVI_BASE + name + '/expressions/' + expression + '.png';
+const navPick = (index = 0) => NAVI_CHARS[index % NAVI_CHARS.length];
+function setNavCompanion(name, expression, message) { const image = $('#nav-companion-image'); if (!image) return; image.src = navImage(name, expression); image.alt = NAVI_NAMES[name] + 'のナビキャラ'; $('#nav-companion-name').textContent = NAVI_NAMES[name]; $('#nav-companion-message').textContent = message; }
+
 const storage = new StorageManager('kanadocchi');
 const eventBus = document;
 const progress = new ProgressManager({ storage, storageKey: 'stage-progress', ids: STAGES.map((stage) => stage.id), eventTarget: eventBus });
@@ -82,6 +89,7 @@ function renderStars(count) {
 }
 
 function renderHome() {
+  const homeNav = document.querySelector('.mascot-message .mascot'); if (homeNav) homeNav.innerHTML = '<img src="'+NAVI_BASE+'tsuki/expressions/02-happy.png" alt="つき">';
   const grid = $('#stage-grid');
   grid.replaceChildren();
 
@@ -170,6 +178,7 @@ function showQuestion() {
   $('#picture').textContent = currentQuestion.image || '🔤';
   $('#question-text').textContent = currentQuestion.question;
   $('#question-instruction').textContent = currentQuestion.stage === 'kuttsuki' ? '（　）に はいる ことばは どっち？' : 'ぶんに あう ことばは どっち？';
+  const nav = navPick(currentIndex); setNavCompanion(nav, currentIndex % 3 === 0 ? '03-thinking' : '07-encouraging', currentIndex === 0 ? 'まずは よく みてみよう！' : 'あせらず えらんでね！');
   $('#feedback').textContent = '';
   $('#feedback').className = 'feedback';
 
@@ -204,14 +213,14 @@ function answer(choice, selectedButton) {
   });
 
   const feedback = $('#feedback');
-  if (result.isCorrect) {
+  if (result.isCorrect) { setNavCompanion(navPick(currentIndex + 1), '08-celebrating', 'せいかい！ すごいね！');
     score.correct();
     if (reviewIds.has(currentQuestion.id)) reviewCorrectCount += 1;
     selectedButton.classList.add('is-correct');
     feedback.className = 'feedback is-correct edu-pop';
     feedback.innerHTML = '<span aria-hidden="true">〇</span> せいかい！';
     playSound('correct', 0.16);
-  } else {
+  } else { setNavCompanion(navPick(currentIndex + 1), '06-troubled', 'だいじょうぶ。つぎで いかそう！');
     score.wrong();
     missedIds.add(currentQuestion.id);
     selectedButton.classList.add('is-wrong', 'edu-shake');
@@ -249,6 +258,8 @@ function finishStage() {
   $('#result-title').textContent = perfect ? 'かんぺき！' : 'よく できました！';
   $('#result-message').textContent = perfect ? 'どっちも しっかり みわけられたね！' : missedIds.size ? 'まちがえた もんだいは、つぎに また でるよ。' : 'さいごまで がんばったね！';
   $('#result-burst').textContent = perfect ? '👑' : currentStage.icon;
+  const resultNav = $('#result-nav-image'); if (resultNav) { resultNav.src = navImage(navPick(result.correct), perfect ? '08-celebrating' : '07-encouraging'); resultNav.alt = 'ナビキャラからのメッセージ'; }
+  const resultNavMessage = $('#result-nav-message'); if (resultNavMessage) resultNavMessage.textContent = perfect ? 'かんぺき！ みんなで よろこんでいるよ！' : 'さいごまで よく がんばったね！';
 
   const newBadges = [];
   const award = (id, condition = true) => {
