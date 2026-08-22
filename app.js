@@ -169,7 +169,7 @@ function showQuestion() {
   $('#progress-fill').style.width = `${(currentIndex / SESSION_SIZE) * 100}%`;
   $('#picture').textContent = currentQuestion.image || '🔤';
   $('#question-text').textContent = currentQuestion.question;
-  $('#question-instruction').textContent = currentQuestion.stage === 'kuttsuki' ? '（　）に はいる もじは どっち？' : 'ぶんに あう ことばは どっち？';
+  $('#question-instruction').textContent = currentQuestion.stage === 'kuttsuki' ? '（　）に はいる ことばは どっち？' : 'ぶんに あう ことばは どっち？';
   $('#feedback').textContent = '';
   $('#feedback').className = 'feedback';
 
