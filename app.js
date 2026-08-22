@@ -16,7 +16,7 @@ const NAVI_CHARS = ["riku","sora","kai","saku","tsuki","nami"];
 const NAVI_NAMES = {"riku":"りく","sora":"そら","kai":"かい","saku":"さく","tsuki":"つき","nami":"なみ"};
 const navImage = (name, expression) => NAVI_BASE + name + '/expressions/' + expression + '.png';
 const navPick = (index = 0) => NAVI_CHARS[index % NAVI_CHARS.length];
-function setNavCompanion(name, expression, message) { const image = $('#nav-companion-image'); if (!image) return; image.src = navImage(name, expression); image.alt = NAVI_NAMES[name] + 'のナビキャラ'; $('#nav-companion-name').textContent = NAVI_NAMES[name]; $('#nav-companion-message').textContent = message; }
+function setNavCompanion(name, expression, message) { const image = $('#nav-companion-image'); if (!image) return; image.src = navImage(name, expression); image.alt = ''; $('#nav-companion-message').textContent = message; }
 
 const storage = new StorageManager('kanadocchi');
 const eventBus = document;
