@@ -218,14 +218,14 @@ function answer(choice, selectedButton) {
     if (reviewIds.has(currentQuestion.id)) reviewCorrectCount += 1;
     selectedButton.classList.add('is-correct');
     feedback.className = 'feedback is-correct edu-pop';
-    feedback.innerHTML = '<span aria-hidden="true">〇</span> せいかい！';
+    feedback.innerHTML = '<img class="feedback-nav" src="' + navImage(navPick(currentIndex + 1), '08-celebrating') + '" alt=""> <span>せいかい！</span>';
     playSound('correct', 0.16);
   } else { setNavCompanion(navPick(currentIndex + 1), '06-troubled', 'だいじょうぶ。つぎで いかそう！');
     score.wrong();
     missedIds.add(currentQuestion.id);
     selectedButton.classList.add('is-wrong', 'edu-shake');
     feedback.className = 'feedback is-wrong';
-    feedback.innerHTML = `おしい！ こたえは <strong>「${correctText}」</strong>`;
+    feedback.innerHTML = '<img class="feedback-nav" src="' + navImage(navPick(currentIndex + 1), '06-troubled') + '" alt=""> <span>もういちど！ こたえは <strong>「' + correctText + '」</strong></span>';
     playSound('softFail', 0.13);
   }
   $('#correct-count').textContent = `〇 ${score.correctCount}`;

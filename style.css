@@ -271,3 +271,11 @@ h1 span { color: #ee604f; }
 .result-navi img { width:64px; height:72px; }
 .result-navi span { max-width:220px; padding:7px 10px; font-size:.78rem; }
 @media (max-width:620px) { .mascot { width:118px; height:56px; } .nav-companion img { width:36px; height:40px; } .nav-companion { min-height:40px; } .result-navi img { width:52px; height:60px; } }
+
+
+/* Small character feedback */
+.feedback { display:flex; align-items:center; justify-content:center; gap:6px; }
+.feedback-nav { width:1.45em; height:1.65em; object-fit:contain; object-position:center bottom; vertical-align:middle; }
+.feedback > span { display:inline-flex; align-items:center; gap:3px; }
+.feedback.is-correct > span:first-of-type { color:#138458; }
+@media (max-width:620px) { .feedback-nav { width:1.35em; height:1.5em; } }
