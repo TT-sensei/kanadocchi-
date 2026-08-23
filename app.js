@@ -11,11 +11,13 @@ import { soundList } from 'https://tt-sensei.github.io/sounds-recipe-/sounds.js'
 import { STAGES, QUESTIONS, BADGES } from './questions.js';
 
 const SESSION_SIZE = 10;
-const NAVI_BASE = 'https://tt-sensei.github.io/navi-character-/assets/characters/';
+const NAVI_BASE = 'https://tt-sensei.github.io/navi-character-/assets/web/characters/';
 const NAVI_CHARS = ["riku","sora","kai","saku","tsuki","nami"];
 const NAVI_NAMES = {"riku":"りく","sora":"そら","kai":"かい","saku":"さく","tsuki":"つき","nami":"なみ"};
-const navImage = (name, expression) => NAVI_BASE + name + '/expressions/' + expression + '.png';
+const navImage = (name, expression) => NAVI_BASE + name + '/expressions/' + expression + '.webp';
 const navPick = (index = 0) => NAVI_CHARS[index % NAVI_CHARS.length];
+const STAGE_NAVI = { kuttsuki: 'saku', youon: 'kai', sokuon: 'tsuki', choon: 'nami' };
+const stageNavImage = (stage) => navImage(STAGE_NAVI[stage.id] || 'saku', '01-normal-smile');
 function setNavCompanion(name, expression, message) { const image = $('#nav-companion-image'); if (!image) return; image.src = navImage(name, expression); image.alt = ''; $('#nav-companion-message').textContent = message; }
 
 const storage = new StorageManager('kanadocchi');
@@ -101,7 +103,7 @@ function renderHome() {
     button.style.setProperty('--stage-color', stage.color);
     button.setAttribute('aria-label', `${stage.name}。${completed ? `ほし ${stageState.bestStars}こ` : 'まだ ちょうせんしていません'}`);
     button.innerHTML = `
-      <span class="stage-icon" aria-hidden="true">${stage.icon}</span>
+      <span class="stage-icon" aria-hidden="true"><img src="${stageNavImage(stage)}" alt=""></span>
       <span class="stage-copy">
         <small>${stage.short}</small>
         <strong>${stage.name}</strong>
